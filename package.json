@@ -1,0 +1,34 @@
+{
+  "name": "polltastic",
+  "version": "0.1.0",
+  "description": "A super duper simple polling application with live updates",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive",
+    "test:watch": "npm run test -- --watch"
+  },
+  "keywords": [
+    "react",
+    "redux",
+    "socketio",
+    "polling"
+  ],
+  "author": "Andres Osorio <androideosorio@me.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.9.0",
+    "babel-core": "^6.9.1",
+    "babel-eslint": "^6.0.4",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "chai": "^3.5.0",
+    "chai-immutable": "^1.5.4",
+    "eslint": "^2.11.1",
+    "eslint-plugin-react": "^5.1.1",
+    "mocha": "^2.5.3"
+  },
+  "dependencies": {
+    "immutable": "^3.8.1"
+  }
+}
