@@ -27,3 +27,17 @@ export function next(state) {
     entries: entries.skip(2)
   });
 }
+
+/**
+ * Perform a vote on the specified entry.
+ * This method creates a new property in the 'vote'
+ * property on the state, and increments the vote count
+ * of the specified entry (creates it if it does not exists).
+ *
+ * @param  {Map}    state the application state.
+ * @param  {string} entry the netry to vote on
+ * @return {Map}       the updated state
+ */
+export function vote(state, entry) {
+  return state.updateIn(['vote', 'tally', entry], 0, tally => tally + 1);
+}

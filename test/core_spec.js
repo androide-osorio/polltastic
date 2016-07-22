@@ -1,13 +1,13 @@
 import { expect } from 'chai';
 import { List, Map } from 'immutable';
 
-import { setEntries, next } from '../src/core';
+import { setEntries, next, vote } from '../src/core';
 
 // describe application logic
 describe('Application Logic', () => {
   let state = null;
 
-  describe('setEntries', () => {
+  describe('#setEntries', () => {
     beforeEach(() => {
       // runs before each test in this block
       state = new Map();
@@ -28,13 +28,18 @@ describe('Application Logic', () => {
       const entries = ['Kill Bill', 'Pulp Fiction'];
       const nextState = setEntries(state, entries);
 
-      expect(nextState.get('entries')).to.be.an.instanceof(List);
-      expect(nextState.get('entries')).to.equal(List.of(...entries));
+      expect(nextState)
+        .to.have.property('entries')
+        .that.is.an.instanceof(List)
+        .that.equals(List.of(...entries));
     });
   });
 
-  describe('next', () => {
+  //---------------------------------------------------------------------------
+
+  describe('#next', () => {
     beforeEach(() => {
+      // set initial state here
       state = new Map({
         entries: List.of('Kill Bill', 'Pulp Fiction', 'Reservoir Dogs')
       });
@@ -47,9 +52,34 @@ describe('Application Logic', () => {
       const nextState = next(state);
 
       expect(nextState).to.include.key('vote');
-      expect(nextState.get('vote')).to.include.key('pair');
-      expect(nextState.get('vote').get('pair')).to.have.sizeOf(2);
-      expect(nextState.get('vote').get('pair')).to.equal(List.of('Kill Bill', 'Pulp Fiction'));
+      expect(nextState).to.have.property('vote').that.includes.key('pair');
+      expect(nextState)
+        .to.have.deep.property('vote.pair')
+        .that.has.sizeOf(2)
+        .and.equals(List.of('Kill Bill', 'Pulp Fiction'));
+    });
+  });
+
+  //---------------------------------------------------------------------------
+
+  describe('#vote', () => {
+    beforeEach(() => {
+      // set initial state here
+      state = new Map({
+        vote: new Map({
+          pair: List.of('Kill Bill', 'Pulp Fiction')
+        }),
+        entries: List.of('Reservoir Dogs', 'Unglorious Bastards')
+      });
+    });
+
+    it('creates a tally for the voted entry', () => {
+      const nextState = vote(state, 'Kill Bill');
+
+      expect(nextState)
+        .to.have.deep.property('vote.tally')
+        .that.has.property('Kill Bill')
+        .and.equals(1);
     });
   });
 });
