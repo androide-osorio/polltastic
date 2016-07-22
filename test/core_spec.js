@@ -7,6 +7,10 @@ import { setEntries, next, vote } from '../src/core';
 describe('Application Logic', () => {
   let state = null;
 
+  //----------------------------------------------------------
+  /* ---------------------------- *
+   * entries modifier function
+   * ---------------------------- */
   describe('#setEntries', () => {
     beforeEach(() => {
       // runs before each test in this block
@@ -35,7 +39,9 @@ describe('Application Logic', () => {
   });
 
   //---------------------------------------------------------------------------
-
+  /* ------------------------ *
+   * Vote manager function
+   * ------------------------ */
   describe('#next', () => {
     beforeEach(() => {
       // set initial state here
@@ -58,55 +64,58 @@ describe('Application Logic', () => {
         .and.equals(List.of('Kill Bill', 'Pulp Fiction'));
     });
 
-    // assert that the next() function correctly handles
-    // the winner of a currently held vote
-    it('puts the winner of current vote back to the entries list', () => {
-      state = new Map({
-        vote: new Map({
-          pair: List.of('Kill Bill', 'Pulp Fiction'),
-          tally: new Map({
-            'Kill Bill': 4,
-            'Pulp Fiction': 2
-          })
-        }),
-        entries: List.of('Unglorious Bastards', 'Reservoir Dogs', 'Django Unchained')
+    //----------------------------------------------------------
+    /* ------------------------ *
+     * Winners handling
+     * ------------------------ */
+    describe('handle vote winners', () => {
+      beforeEach(() => {
+        // set initial state with a predefined vote and tally
+        state = new Map({
+          vote: new Map({
+            pair: List.of('Kill Bill', 'Pulp Fiction'),
+            tally: new Map({
+              'Kill Bill': 4,
+              'Pulp Fiction': 2
+            })
+          }),
+          entries: List.of('Unglorious Bastards', 'Reservoir Dogs', 'Django Unchained')
+        });
       });
-      const nextState = next(state);
 
-      expect(nextState).to.not.have.deep.property('vote.tally');
-      expect(nextState)
-        .to.have.deep.property('vote.pair')
-        .that.includes('Unglorious Bastards', 'Reservoir Dogs');
-      expect(nextState)
-        .to.have.property('entries')
-        .that.equals(List.of('Django Unchained', 'Kill Bill'));
-    });
+      // assert that the next() function correctly handles
+      // the winner of a currently held vote
+      it('puts the winner of current vote back to the entries list', () => {
+        const nextState = next(state);
 
-    // assert that the next() function can handle ties
-    it('puts both entries from tied vote back to the entries list', () => {
-      state = new Map({
-        vote: new Map({
-          pair: List.of('Kill Bill', 'Pulp Fiction'),
-          tally: new Map({
-            'Kill Bill': 4,
-            'Pulp Fiction': 4
-          })
-        }),
-        entries: List.of('Unglorious Bastards', 'Reservoir Dogs', 'Django Unchained')
+        expect(nextState).to.not.have.deep.property('vote.tally');
+        expect(nextState)
+          .to.have.deep.property('vote.pair')
+          .that.includes('Unglorious Bastards', 'Reservoir Dogs');
+        expect(nextState)
+          .to.have.property('entries')
+          .that.equals(List.of('Django Unchained', 'Kill Bill'));
       });
-      const nextState = next(state);
 
-      expect(nextState)
-        .to.have.deep.property('vote.pair')
-        .that.includes('Unglorious Bastards', 'Reservoir Dogs');
-      expect(nextState)
-        .to.have.property('entries')
-        .that.equals(List.of('Django Unchained', 'Kill Bill', 'Pulp Fiction'));
+      // assert that the next() function can handle ties
+      it('puts both entries from tied vote back to the entries list', () => {
+        const tiedState = state.setIn(['vote', 'tally', 'Pulp Fiction'], 4);
+        const nextState = next(tiedState);
+
+        expect(nextState)
+          .to.have.deep.property('vote.pair')
+          .that.includes('Unglorious Bastards', 'Reservoir Dogs');
+        expect(nextState)
+          .to.have.property('entries')
+          .that.equals(List.of('Django Unchained', 'Kill Bill', 'Pulp Fiction'));
+      });
     });
   });
 
   //---------------------------------------------------------------------------
-
+  /* ------------------------ *
+   * Voting entry function
+   * ------------------------ */
   describe('#vote', () => {
     beforeEach(() => {
       // set initial state here
