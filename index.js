@@ -7,4 +7,10 @@ import startServer from './src/server';
 export const store = makeStore();
 
 // start a web sockets server
-const socketServer = startServer();
+startServer(store);
+
+// load mock info
+store.dispatch({
+  type: 'SET_ENTRIES',
+  entries: require('./data/mock_entries.json')
+});

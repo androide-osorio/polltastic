@@ -1,6 +1,6 @@
-Polltastic
+Redux Poll Server
 ===
-[![Build Status](https://travis-ci.org/androide-osorio/polltastic.svg?branch=master)](https://travis-ci.org/androide-osorio/polltastic)
+[![Build Status](https://travis-ci.org/androide-osorio/redux-poll-server.svg?branch=master)](https://travis-ci.org/androide-osorio/redux-poll-server)
 
 A super duper simple, embeddable cloud service to create and manage polls across multiple devices with multiple client support, automatic updating, and powerful reporting and sharing capabilities.
 
@@ -15,7 +15,7 @@ You must have nodeJS installed on you machine or server. You can find instructio
 
 Project Dependencies
 ---
-Polltastic uses React technologies for Component-based User Interfaces, combined with the Redux framework for handling application state. The libraries used are:
+This project uses React technologies for Component-based User Interfaces, combined with the Redux framework for handling application state. The libraries used are:
 
 ### Front end dependencies
 * [React (JS v1.15+)](https://facebook.github.io/react/).
@@ -32,8 +32,8 @@ Project Setup
 Clone this repository in your local machine or server in the location you need:
 
 ```bash
-$ cd /path/to/polltastic
-$ git clone https://github.com/androide-osorio/polltastic.git
+$ cd /path/to/project
+$ git clone https://github.com/androide-osorio/redux-poll-server.git
 ```
 
 Install node packages by running:
