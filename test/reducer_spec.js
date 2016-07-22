@@ -25,6 +25,24 @@ describe('Application Reducer', () => {
     expect(nextState).to.equal(initialState);
   });
 
+  // assert that the reducer function fulfills the contract
+  // of an Array's reduce() function
+  it('can be used with Array.reduce()', () => {
+    const actions = [
+      { type: 'SET_ENTRIES', entries: ['Kill Bill', 'Pulp Fiction'] },
+      { type: 'NEXT' },
+      { type: 'VOTE', entry: 'Kill Bill' },
+      { type: 'VOTE', entry: 'Kill Bill' },
+      { type: 'VOTE', entry: 'Pulp Fiction' },
+      { type: 'VOTE', entry: 'Kill Bill' },
+      { type: 'VOTE', entry: 'Pulp Fiction' },
+      { type: 'NEXT' }
+    ];
+    const finalState = actions.reduce(reducer, new Map());
+
+    expect(finalState).to.have.property('winner').that.equals('Kill Bill');
+  });
+
   describe('handle Application Actions', () => {
     // reducer can handle SET_ENTRIES Action
     it('handles SET_ENTRIES', () => {
