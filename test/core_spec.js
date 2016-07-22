@@ -7,7 +7,7 @@ import { setEntries, next, vote } from '../src/core';
 describe('Application Logic', () => {
   let state = null;
 
-  //----------------------------------------------------------
+  // ----------------------------------------------------------
   /* ---------------------------- *
    * entries modifier function
    * ---------------------------- */
@@ -38,7 +38,7 @@ describe('Application Logic', () => {
     });
   });
 
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
   /* ------------------------ *
    * Vote manager function
    * ------------------------ */
@@ -64,7 +64,7 @@ describe('Application Logic', () => {
         .and.equals(List.of('Kill Bill', 'Pulp Fiction'));
     });
 
-    //----------------------------------------------------------
+    // ----------------------------------------------------------
     /* ------------------------ *
      * Winners handling
      * ------------------------ */
@@ -121,7 +121,7 @@ describe('Application Logic', () => {
     });
   });
 
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
   /* ------------------------ *
    * Voting entry function
    * ------------------------ */
@@ -129,10 +129,7 @@ describe('Application Logic', () => {
     beforeEach(() => {
       // set initial state here
       state = new Map({
-        vote: new Map({
-          pair: List.of('Kill Bill', 'Pulp Fiction')
-        }),
-        entries: List.of('Reservoir Dogs', 'Unglorious Bastards')
+        pair: List.of('Kill Bill', 'Pulp Fiction')
       });
     });
 
@@ -142,21 +139,19 @@ describe('Application Logic', () => {
       const nextState = vote(state, 'Kill Bill');
 
       expect(nextState)
-        .to.have.deep.property('vote.tally')
-        .that.has.property('Kill Bill')
+        .to.have.deep.property(['tally', 'Kill Bill'])
         .and.equals(1);
     });
 
     // increment the votes on a specified entry in the tally
     it('adds to existing tally for the voted entry', () => {
-      const stateWithTally = state.setIn(['vote', 'tally', 'Kill Bill'], 4)
-        .setIn(['vote', 'tally', 'Pulp Fiction'], 2);
+      const stateWithTally = state.setIn(['tally', 'Kill Bill'], 4)
+        .setIn(['tally', 'Pulp Fiction'], 2);
 
       const nextState = vote(stateWithTally, 'Kill Bill');
 
       expect(nextState)
-        .to.have.deep.property('vote.tally')
-        .that.has.property('Kill Bill')
+        .to.have.deep.property(['tally', 'Kill Bill'])
         .and.equals(5);
     });
   });

@@ -61,10 +61,12 @@ export function next(state) {
  * property on the state, and increments the vote count
  * of the specified entry (creates it if it does not exists).
  *
- * @param  {Map}    state the application state.
- * @param  {string} entry the netry to vote on
- * @return {Map}       the updated state
+ * @param  {Map}    voteState the application's current vote state.
+ * @param  {string} entry     the netry to vote on
+ * @return {Map}              the updated state
  */
-export function vote(state, entry) {
-  return state.updateIn(['vote', 'tally', entry], 0, tally => tally + 1);
+export function vote(voteState, entry) {
+  return voteState.updateIn(
+    ['tally', entry], 0, tally => tally + 1
+  );
 }
