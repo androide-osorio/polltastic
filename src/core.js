@@ -14,13 +14,31 @@ export function setEntries(state, entries = []) {
 }
 
 /**
+ * determine the winner of the provided vote tally.
+ *
+ * @param  {Map} vote the current entries under vote
+ * @return {string|Array}  the vote's winner or an array of the entries if it's a tie
+ */
+function getWinners(vote) {
+  if(!vote) return [];
+  const [a, b] = vote.get('pair');
+  const aVotes = vote.getIn(['tally', a], 0);
+  const bVotes = vote.getIn(['tally', b], 0);
+
+  if      (aVotes > bVotes) return [a];
+  else if (aVotes < bVotes) return [b];
+  else                      return [a, b];
+}
+
+/**
  * extracts the next two entries for vote
  * e.g: the first two entries in the list.
  * @param  {Immutable.Map}   state the application's current state
  * @return {Immutable.Map}         modified state
  */
 export function next(state) {
-  const entries = state.get('entries');
+  const winners = getWinners(state.get('vote'));
+  const entries = state.get('entries').concat(winners);
 
   return state.merge({
     vote: new Map({ pair: entries.take(2) }),

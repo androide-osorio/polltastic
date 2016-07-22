@@ -57,6 +57,30 @@ describe('Application Logic', () => {
         .that.has.sizeOf(2)
         .and.equals(List.of('Kill Bill', 'Pulp Fiction'));
     });
+
+    // assert that the next() function correctly handles
+    // the winner of a currently held vote
+    it('puts the winner of current vote back to the entries list', () => {
+      state = new Map({
+        vote: new Map({
+          pair: List.of('Kill Bill', 'Pulp Fiction'),
+          tally: new Map({
+            'Kill Bill': 4,
+            'Pulp Fiction': 2
+          })
+        }),
+        entries: List.of('Unglorious Bastards', 'Reservoir Dogs', 'Django Unchained')
+      });
+      const nextState = next(state);
+
+      expect(nextState).to.not.have.deep.property('vote.tally');
+      expect(nextState)
+        .to.have.deep.property('vote.pair')
+        .that.includes('Unglorious Bastards', 'Reservoir Dogs');
+      expect(nextState)
+        .to.have.property('entries')
+        .that.equals(List.of('Django Unchained', 'Kill Bill'));
+    });
   });
 
   //---------------------------------------------------------------------------
