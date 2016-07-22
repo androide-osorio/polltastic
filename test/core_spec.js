@@ -34,7 +34,7 @@ describe('Application Logic', () => {
       expect(nextState)
         .to.have.property('entries')
         .that.is.an.instanceof(List)
-        .that.equals(List.of(...entries));
+        .and.equals(List.of(...entries));
     });
   });
 
