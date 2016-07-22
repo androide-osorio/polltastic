@@ -109,6 +109,15 @@ describe('Application Logic', () => {
           .to.have.property('entries')
           .that.equals(List.of('Django Unchained', 'Kill Bill', 'Pulp Fiction'));
       });
+
+      // assert that the next() function can mark the
+      // final winner of the current entry list
+      it('marks winner when just one entry is left', () => {
+        const noEntriesLeftState = state.set('entries', new List([]));
+        const nextState = next(noEntriesLeftState);
+
+        expect(nextState).to.have.property('winner').that.equals('Kill Bill');
+      });
     });
   });
 
