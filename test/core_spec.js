@@ -18,8 +18,7 @@ describe('Application Logic', () => {
       const entries = List.of('Kill bill', 'Pulp Fiction');
       const nextState = setEntries(state, entries);
 
-      expect(nextState).to.have.property('entries');
-      expect(nextState.get('entries')).to.equal(entries);
+      expect(nextState).to.have.property('entries').that.equals(entries);
     });
 
     // test that this reducer converts mutable data structures
@@ -73,6 +72,8 @@ describe('Application Logic', () => {
       });
     });
 
+    // create a new tally for the currently voted entries
+    // and manage the votes accordingly
     it('creates a tally for the voted entry', () => {
       const nextState = vote(state, 'Kill Bill');
 
@@ -80,6 +81,19 @@ describe('Application Logic', () => {
         .to.have.deep.property('vote.tally')
         .that.has.property('Kill Bill')
         .and.equals(1);
+    });
+
+    // increment the votes on a specified entry in the tally
+    it('adds to existing tally for the voted entry', () => {
+      const stateWithTally = state.setIn(['vote', 'tally', 'Kill Bill'], 4)
+        .setIn(['vote', 'tally', 'Pulp Fiction'], 2);
+
+      const nextState = vote(stateWithTally, 'Kill Bill');
+
+      expect(nextState)
+        .to.have.deep.property('vote.tally')
+        .that.has.property('Kill Bill')
+        .and.equals(5);
     });
   });
 });
