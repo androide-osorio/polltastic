@@ -81,6 +81,28 @@ describe('Application Logic', () => {
         .to.have.property('entries')
         .that.equals(List.of('Django Unchained', 'Kill Bill'));
     });
+
+    // assert that the next() function can handle ties
+    it('puts both entries from tied vote back to the entries list', () => {
+      state = new Map({
+        vote: new Map({
+          pair: List.of('Kill Bill', 'Pulp Fiction'),
+          tally: new Map({
+            'Kill Bill': 4,
+            'Pulp Fiction': 4
+          })
+        }),
+        entries: List.of('Unglorious Bastards', 'Reservoir Dogs', 'Django Unchained')
+      });
+      const nextState = next(state);
+
+      expect(nextState)
+        .to.have.deep.property('vote.pair')
+        .that.includes('Unglorious Bastards', 'Reservoir Dogs');
+      expect(nextState)
+        .to.have.property('entries')
+        .that.equals(List.of('Django Unchained', 'Kill Bill', 'Pulp Fiction'));
+    });
   });
 
   //---------------------------------------------------------------------------
