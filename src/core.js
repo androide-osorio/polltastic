@@ -3,6 +3,9 @@
  */
 import { List, Map } from 'immutable';
 
+// initial app state
+export const INITIAL_STATE = new Map();
+
 /**
  * set the entries of the app's state
  * @param {Immutable.Map}  state   the application's current state
